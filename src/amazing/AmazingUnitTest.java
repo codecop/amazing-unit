@@ -6,36 +6,46 @@ public class AmazingUnitTest {
 
     public static void main(String[] args) {
         // (1) failing assertTrue should set state to failed
-        success = true;
+        beforeTest();
+        
         assertTrue(false);
-        if (success) {
+        
+        if (result().contentEquals("Red")) {
             System.out.println("Green");
-        } else {
-            // assert: will sehen Red
-            System.out.println("expected: Red");
-        }
-
-        // (2) success assertTrue should set state to true
-        success = true;
-        assertTrue(true);
-        if (success) {
-            // assert: will Green
-            System.out.println("expected: Green");
         } else {
             System.out.println("Red");
         }
 
-        // (3) failed followed by success should leave state to false
-        success = true;
+        beforeTest();
+        assertTrue(true);
+        if (result().contentEquals("Green")) {
+            // assert: will Green
+            System.out.println("Green");
+        } else {
+            System.out.println("Red");
+        }
+
+        beforeTest();
         assertTrue(false);
         assertTrue(true);
-        if (success) {
+        if (result().contentEquals("Red")) {
             System.out.println("Green");
         } else {
             // assert: will sehen Red
-            System.out.println("expected: Red");
+            System.out.println("Red");
         }
         // TODO refactor duplication
+    }
+
+    private static void beforeTest() {
+        success = true;
+    }
+    
+    private static String result() {
+        if (success) {
+            return "Green";
+        }
+        return "Red";
     }
 
     private static void assertTrue(boolean b) {

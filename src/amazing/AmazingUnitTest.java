@@ -1,12 +1,12 @@
 package amazing;
 
-import static amazing.AmazingUnit.*;
+import static amazing.AmazingTestRunner.*;
 
-class AmazingUnit {
+class AmazingTestRunner {
 
     static boolean success = true;
 
-    public static void runTest(Runnable body) {
+    public void runTest(Runnable body) {
         beforeTest();
 
         body.run();
@@ -14,11 +14,11 @@ class AmazingUnit {
         reportTestState();
     }
 
-    private static void beforeTest() {
+    private void beforeTest() {
         success = true;
     }
 
-    private static void reportTestState() {
+    private void reportTestState() {
         if (success) {
             System.out.println("Green");
         } else {
@@ -38,7 +38,7 @@ public class AmazingUnitTest {
         assertTrue(false);
         
         // assert: will Red
-        AmazingUnit.success = !AmazingUnit.success;
+        AmazingTestRunner.success = !AmazingTestRunner.success;
     }
 
     private static void successAssertShouldSucceed() {
@@ -50,21 +50,24 @@ public class AmazingUnitTest {
         assertTrue(true);
         
         // assert: will Red
-        AmazingUnit.success = !AmazingUnit.success;
+        AmazingTestRunner.success = !AmazingTestRunner.success;
     }
 
     public static void main(String[] args) {
-        runTest(AmazingUnitTest::failingAssertShouldFail);
-        runTest(AmazingUnitTest::successAssertShouldSucceed);
-        runTest(AmazingUnitTest::failingAssertThenSuccessfulShouldFail);
+        AmazingTestRunner runner = new AmazingTestRunner();
+        runner.runTest(AmazingUnitTest::failingAssertShouldFail);
+        runner.runTest(AmazingUnitTest::successAssertShouldSucceed);
+        runner.runTest(AmazingUnitTest::failingAssertThenSuccessfulShouldFail);
     }
 
 }
 
 /*
  * Test List
- * - assertTrue
+ * - assertTrue (DONE)
  * - assertEqual
- * - define test, find test, run test
+ * - define test (DONE) 
+ *   find test
+ *   run test (DONE)
  * - fixtures (before, after)
  */

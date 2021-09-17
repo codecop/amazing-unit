@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 class AmazingTestRunner implements Asserts {
 
-    static boolean success = true;
+    private boolean success;
 
     public void runTest(Consumer<Asserts> body) {
         beforeTest();
@@ -26,6 +26,10 @@ class AmazingTestRunner implements Asserts {
         }
     }
 
+    void expectTestFailed() {
+        success = !success;
+    }
+
     @Override
     public void assertTrue(boolean b) {
         success = success && b;
@@ -39,7 +43,7 @@ public class AmazingUnitTest {
         a.assertTrue(false);
 
         // assert: will Red
-        AmazingTestRunner.success = !AmazingTestRunner.success;
+        expectTestFailed(a);
     }
 
     private static void successAssertShouldSucceed(Asserts a) {
@@ -51,7 +55,11 @@ public class AmazingUnitTest {
         a.assertTrue(true);
 
         // assert: will Red
-        AmazingTestRunner.success = !AmazingTestRunner.success;
+        expectTestFailed(a);
+    }
+
+    private static void expectTestFailed(Asserts a) {
+        ((AmazingTestRunner) a).expectTestFailed();
     }
 
     public static void main(String[] args) {

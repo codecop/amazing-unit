@@ -5,32 +5,34 @@ public class AmazingUnitTest {
     private static boolean success = true;
 
     public static void main(String[] args) {
-        // (1) failing assertTrue should set state to failed
+        runTest(AmazingUnitTest::failingAssertShouldFail);
+        runTest(AmazingUnitTest::successAssertShouldSucceed);
+        runTest(AmazingUnitTest::failingAssertThenSuccessfulShouldFail);
+    }
+
+    private static void runTest(Runnable body) {
         beforeTest();
         
-        assertTrue(false);
-        // assert: will sehen Red
-        success = !success;
+        body.run();
         
         reportTestState();
+    }
 
-        // (2) success assertTrue should set state to true
-        beforeTest();
-        
-        assertTrue(true);
-        
-        // assert: will Green
-        reportTestState();
-
-        // (3) failed followed by success should leave state to false.
-        beforeTest();
-        
+    private static void failingAssertThenSuccessfulShouldFail() {
         assertTrue(false);
         assertTrue(true);
         // assert: will sehen Red
         success = !success;
+    }
 
-        reportTestState();
+    private static void successAssertShouldSucceed() {
+        assertTrue(true);
+    }
+
+    private static void failingAssertShouldFail() {
+        assertTrue(false);
+        // assert: will sehen Red
+        success = !success;
     }
 
     private static void reportTestState() {

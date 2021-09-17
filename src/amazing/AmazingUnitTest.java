@@ -2,11 +2,11 @@ package amazing;
 
 import java.util.function.Consumer;
 
-class AmazingTestRunner {
+class AmazingTestRunner implements Asserts {
 
     static boolean success = true;
 
-    public void runTest(Consumer<AmazingTestRunner> body) {
+    public void runTest(Consumer<Asserts> body) {
         beforeTest();
 
         body.accept(this);
@@ -26,6 +26,7 @@ class AmazingTestRunner {
         }
     }
 
+    @Override
     public void assertTrue(boolean b) {
         success = success && b;
     }
@@ -34,18 +35,18 @@ class AmazingTestRunner {
 
 public class AmazingUnitTest {
 
-    private static void failingAssertShouldFail(AmazingTestRunner a) {
+    private static void failingAssertShouldFail(Asserts a) {
         a.assertTrue(false);
 
         // assert: will Red
         AmazingTestRunner.success = !AmazingTestRunner.success;
     }
 
-    private static void successAssertShouldSucceed(AmazingTestRunner a) {
+    private static void successAssertShouldSucceed(Asserts a) {
         a.assertTrue(true);
     }
 
-    private static void failingAssertThenSuccessfulShouldFail(AmazingTestRunner a) {
+    private static void failingAssertThenSuccessfulShouldFail(Asserts a) {
         a.assertTrue(false);
         a.assertTrue(true);
 

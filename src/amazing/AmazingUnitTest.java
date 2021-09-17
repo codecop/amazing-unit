@@ -1,38 +1,21 @@
 package amazing;
 
-public class AmazingUnitTest {
+import static amazing.AmazingUnit.*;
 
-    private static boolean success = true;
+class AmazingUnit {
 
-    public static void main(String[] args) {
-        runTest(AmazingUnitTest::failingAssertShouldFail);
-        runTest(AmazingUnitTest::successAssertShouldSucceed);
-        runTest(AmazingUnitTest::failingAssertThenSuccessfulShouldFail);
-    }
+    static boolean success = true;
 
-    private static void runTest(Runnable body) {
+    public static void runTest(Runnable body) {
         beforeTest();
-        
+
         body.run();
-        
+
         reportTestState();
     }
 
-    private static void failingAssertThenSuccessfulShouldFail() {
-        assertTrue(false);
-        assertTrue(true);
-        // assert: will sehen Red
-        success = !success;
-    }
-
-    private static void successAssertShouldSucceed() {
-        assertTrue(true);
-    }
-
-    private static void failingAssertShouldFail() {
-        assertTrue(false);
-        // assert: will sehen Red
-        success = !success;
+    private static void beforeTest() {
+        success = true;
     }
 
     private static void reportTestState() {
@@ -43,13 +26,39 @@ public class AmazingUnitTest {
         }
     }
 
-    private static void beforeTest() {
-        success = true;
-    }
-    
-    private static void assertTrue(boolean b) {
+    public static void assertTrue(boolean b) {
         success = success && b;
     }
+
+}
+
+public class AmazingUnitTest {
+
+    private static void failingAssertShouldFail() {
+        assertTrue(false);
+        
+        // assert: will Red
+        AmazingUnit.success = !AmazingUnit.success;
+    }
+
+    private static void successAssertShouldSucceed() {
+        assertTrue(true);
+    }
+
+    private static void failingAssertThenSuccessfulShouldFail() {
+        assertTrue(false);
+        assertTrue(true);
+        
+        // assert: will Red
+        AmazingUnit.success = !AmazingUnit.success;
+    }
+
+    public static void main(String[] args) {
+        runTest(AmazingUnitTest::failingAssertShouldFail);
+        runTest(AmazingUnitTest::successAssertShouldSucceed);
+        runTest(AmazingUnitTest::failingAssertThenSuccessfulShouldFail);
+    }
+
 }
 
 /*

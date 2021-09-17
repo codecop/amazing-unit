@@ -1,15 +1,15 @@
 package amazing;
 
-import static amazing.AmazingTestRunner.*;
+import java.util.function.Consumer;
 
 class AmazingTestRunner {
 
     static boolean success = true;
 
-    public void runTest(Runnable body) {
+    public void runTest(Consumer<AmazingTestRunner> body) {
         beforeTest();
 
-        body.run();
+        body.accept(this);
 
         reportTestState();
     }
@@ -26,7 +26,7 @@ class AmazingTestRunner {
         }
     }
 
-    public static void assertTrue(boolean b) {
+    public void assertTrue(boolean b) {
         success = success && b;
     }
 
@@ -34,21 +34,21 @@ class AmazingTestRunner {
 
 public class AmazingUnitTest {
 
-    private static void failingAssertShouldFail() {
-        assertTrue(false);
-        
+    private static void failingAssertShouldFail(AmazingTestRunner a) {
+        a.assertTrue(false);
+
         // assert: will Red
         AmazingTestRunner.success = !AmazingTestRunner.success;
     }
 
-    private static void successAssertShouldSucceed() {
-        assertTrue(true);
+    private static void successAssertShouldSucceed(AmazingTestRunner a) {
+        a.assertTrue(true);
     }
 
-    private static void failingAssertThenSuccessfulShouldFail() {
-        assertTrue(false);
-        assertTrue(true);
-        
+    private static void failingAssertThenSuccessfulShouldFail(AmazingTestRunner a) {
+        a.assertTrue(false);
+        a.assertTrue(true);
+
         // assert: will Red
         AmazingTestRunner.success = !AmazingTestRunner.success;
     }
@@ -69,5 +69,6 @@ public class AmazingUnitTest {
  * - define test (DONE) 
  *   find test
  *   run test (DONE)
+ * - statistics
  * - fixtures (before, after)
  */
